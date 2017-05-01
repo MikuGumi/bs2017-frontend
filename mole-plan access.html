@@ -4,7 +4,7 @@
 <head>
     <title>whack-a-mole</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -28,8 +28,8 @@
             margin: auto;
         }
 
-        #playground table {                            
-            /*margin-top: -180px;*/
+        #playground table {
+            margin-top: -250px;
             margin-left: -250px;
         }
 
@@ -43,14 +43,13 @@
             background-size: 120px 60px;
             background-position: top 0;
             position: relative;
-            /*transform: all .5s;*/
         }
 
         #playground .mole::before {
             content: "";
             width: 80px;
             height: 80px;
-            background-image: url(./images/mole-laugh1.png);
+            background-image: url(http://dl.stickershop.line.naver.jp/products/0/0/1/1528/android/stickers/28292.png);
             background-repeat: no-repeat;
             background-size: 80px 80px;
             background-position: top 0;
@@ -62,17 +61,20 @@
         }
 
         #playground .mole.active::before {
-            background-image: url(./images/mole.png);
+            background-image: url(https://lh5.ggpht.com/4JSjgcDs6sKAn5XSBptviNIKqOOEXFZBveBXVRRXpucR9W-UAU35SaiqCGb0AEIV9g);
+            background-size: 90px 90px;
             top: 0;
+            right: 60px;
             opacity: 1;
             transition: all .3s;
         }
 
         #playground .mole.hit::before {
-            background-image: url(./images/mole-thump4.png);
-            top: 40px;
+            /*background-image: url(http://g.udn.com.tw/community/img/PSN_PHOTO/iftcat4ever/f_2772326_1.gif);*/
+            background-image: url(http://ubq.ubiaoqing.com/ubiaoqingdd4df4eb41f0761303ff3d9efb8f886b.gif);
+            top: 10px;
             opacity: 1;
-            transition: all .2s;
+            transition: all .3s;
         }
 
         #playground .mole::after {
@@ -101,62 +103,55 @@
 
 <body>
     <div id="game">
-
-        <div class="row">
-
-            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                <div id="playground">
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="mole active"></div>
-                            </td>
-                            <td>
-                                <div class="mole hit"></div>
-                            </td>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                            <td>
-                                <div class="mole"></div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <div id="score">
-                    <h2 class="text-danger">Scoreboard</h2>
-                    <h3>
-                        <span class="text-info">Your score: <span>
+        <div id="playground">
+            <table>
+                <tr>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                    <td>
+                        <div class="mole"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="score">
+            <h2 class="text-danger">Scoreboard</h2>
+            <h3>
+                <span class="text-info">Your score: <span>
                     <span id="current-score" class="scores">0</span>
-                    </h3>
-                    <h3>
-                        <span class="text-info">Level: <span>
+            </h3>
+            <h3>
+                <span class="text-info">Level: <span>
                     <span id="current-level" class="scores">1</span>
-                    </h3>
-                    <h3>
-                        <span class="text-info">Life: <span>
+            </h3>
+            <h3>
+                <span class="text-info">Life: <span>
                     
                 </h3>
                 <div class="progress">
@@ -182,14 +177,9 @@
             <div id="control">
             </div>
         </div>
-            </div>
-            
-        </div>
-        
-       
-        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
         <script>
             $(function () {
                 var score = 0,
@@ -204,79 +194,83 @@
                         { level: 6, score: 1000, moles: 3, interval: 750 },
                     ];
 
+
                 var $playground = $("#playground");
 
-                $playground.on("click", ".mole.active", function () {
                     // 打地鼠事件
-                    var $mole = $(this);
-                    $mole.addClass('hit');                   
-                    updateScore();                                                                                                                                                                      
+                $playground.on("click", ".mole.active", function () {
+                    var $this = $(this);
+                    $this.removeClass('active') 
+                    .addClass('hit');
                 });
 
+
+                   // 變更尺寸事件
                 $("#sizing").change(function () {
-                    // 變更尺寸事件 
-                   createPlayground(this.value);              
+                   createPlayground(this.value);       
                 });
 
+                   // 開始遊戲事件
                 $("#start").click(function () {
-                    // 開始遊戲事件                                   
-                    startGame();                    
+                    startGame();
                 });
 
-                $("#stop").click(function () {
                     // 終止遊戲事件
-                    stopGame()
+                $("#stop").click(function () {
+                    stopGame();
                 });
-                function createPlayground(edge) {      
-                    // 建立空間       
-                    $playground.empty();       
+
+
+                    // 建立空間
+                function createPlayground(edge) {
+                    $playground.empty();
                     var $table = $('<table></table>').appendTo($playground);
-                    for (var i = 0; i < edge; i++) {
-                        var $tr = $('<tr></tr>').appendTo($table);                 
+                    for(var i = 0; i < edge; i++){
+                        var $tr = $('<tr></tr>').appendTo($table);
 
-                            for (j = 0; j < edge; j++) {
-                                var $td = $('<td></td>').appendTo($tr);
-                                var $div = $('<div></div>').addClass("mole").appendTo($td);                                
-                        }
-                    }                       
+                        for(var j = 0; j < edge; j++){
+                            var $td = $('<td></td>').appendTo($tr);
+                            var $div = $('<div></div>').addClass("mole").appendTo($td);
+                        }                    
+                    }
                 }
+
+                    // 開始遊戲
                 function startGame() {
-                    // 開始遊戲 
-                    nextMole();                                                        
+                    nextMole();
                 }
 
-                function stopGame() {
                     // 終止遊戲
-                    // clearTimeout(timer); 
-                    // $(".mole.active").removeClass("active"); 
-                    // $(".mole.hit").removeClass("hit");
+                function stopGame() {
+                    clearTimeout(timer);
+                    $(".mole.active").removeClass("active")
+                    $(".mole.hit").removeClass("hit")
                 }
 
-                function getLevelProfile() {
                     // 取得目前等級參數
+                function getLevelProfile() {
+
                 }
 
-                function updateScore() {
                     // 更新成績
-                    score += 10;
-                    $('#current-score').text(score); 
+                function updateScore() {
+                    
                 }
 
+                    // 更新成績
                 function updateLife() {
-                    // 更新生命值
-                    life -= 10;
-                    $('#progress').text(life);
+
                 }
 
+                    // 🐭 下一隻地鼠
                 function nextMole() {
-                    var $mole = $('.mole');
-                    var rnd = Math.floor((Math.random() * 9));
-                    $mole.removeClass('hit').removeClass('active');
-                    $( `.mole:eq(${rnd})`).addClass('active');
-                    setTimeout(function() {
-                        nextMole();
-                    }, 1000);                                                         
-                    // 🐭 下一隻地鼠                    
+                    var $moles = $('.mole');
+                        $moles.removeClass("active");
+                        $moles.removeClass("hit");
+                        var n = Math.floor(Math.random() * $moles.length);
+                        $moles.eq(n).addClass("active");                       
+                        timer = setTimeout(nextMole, 1500);
+
                 }
                 
                 createPlayground(3);
