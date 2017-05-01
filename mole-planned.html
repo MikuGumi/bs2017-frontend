@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.2/sweetalert2.min.css" rel="stylesheet">
     <style>
         body {
             background: url(./images/umaru.jpg);
@@ -68,7 +69,7 @@
 
         #playground .mole.active::before {
             background-image: url(./images/mole.png);
-            top: 0;
+            top: 10px;
             opacity: 1;
             transition: all .3s;
         }
@@ -83,13 +84,13 @@
         #playground .mole::after {
             content: "";
             width: 120px;
-            height: 60px;
+            height: 85px;
             background-image: url(./images/grass-lower.png);
             background-repeat: no-repeat;
             background-size: 120px 60px;
             background-position: top 0;
             position: absolute;
-            bottom: 0;
+            bottom: -50px;
             left: 0;
         }
 
@@ -195,7 +196,8 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.2/sweetalert2.common.min.js"></script>        
+        <script>            
             $(function () {
                 var score = 0,
                     life = 100,
@@ -214,7 +216,8 @@
                 $playground.on("click", ".mole.active", function () {
                     // 打地鼠事件
                     var $mole = $(this);
-                    $mole.addClass('hit');                   
+                    $mole.addClass('hit');
+                    life += 20;                   
                     updateScore();                                                                                                                                                                      
                 });
 
@@ -225,7 +228,7 @@
 
                 $("#start").click(function () {
                     // 開始遊戲事件                                   
-                    startGame();                    
+                    startGame();                                
                 });
 
                 $("#stop").click(function () {
@@ -247,15 +250,26 @@
                 }
                 function startGame() {
                     // 開始遊戲 
-                    nextMole();                                                        
+                    nextMole();                                                                       
                 }
 
                 function stopGame() {
                     // 終止遊戲
                     clearTimeout(timer); 
                     $(".mole.active").removeClass("active"); 
-                    $(".mole.hit").removeClass("hit");
+                    $(".mole.hit").removeClass("hit");                   
                 }
+
+                // function gameOver() {
+                //     sweetAlert({
+                //             title: 'Game Over!',
+                //             html: $('<div>')
+                //                 .addClass('some-class')
+                //                 .text('you lose.'),
+                //             animation: false,
+                //             customClass: 'animated tada'
+                //     });                  
+                // }
 
                 function getLevelProfile() {
                     // 取得目前等級參數
@@ -269,18 +283,25 @@
 
                 function updateLife() {
                     // 更新生命值
-                    life -= 10;
                     $('#progress').text(life);
+                    if(life > 0) {
+                        life -= 20;                        
+                    } else if (life <= 0) {
+                        stopGame();             
+                        return;
+                    }                    
+                    // $('#progress').attr("aria-valuenow", life).css("width", life + "%").text(life);                    
                 }
 
                 function nextMole() {
                     var $mole = $('.mole');
-                    var rnd = Math.floor((Math.random() * 9));
+                    var rnd = Math.floor((Math.random() * 9));                    
                     $mole.removeClass('hit').removeClass('active');
                     $( `.mole:eq(${rnd})`).addClass('active');
+                    updateLife();   
                     timer = setTimeout(function() {
                         nextMole();
-                    }, 1000);                                                         
+                    }, 1000);                                                                       
                     // 🐭 下一隻地鼠                    
                 }
                 
