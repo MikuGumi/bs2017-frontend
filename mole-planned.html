@@ -218,7 +218,7 @@
                     life += 10;                     
                     var $mole = $(this);
                     $mole.addClass('hit');                                      
-                    updateScore();                                                                                                                                                                      
+                    updateScore();                                                                                                                                                                     
                 });
 
                 $("#sizing").change(function () {
@@ -250,7 +250,8 @@
                 }
                 function startGame() {
                     // 開始遊戲 
-                    nextMole();                                                                       
+                    nextMole();  
+                    getLevelProfile();                                                                     
                 }
 
                 function stopGame() {
@@ -275,12 +276,21 @@
 
                 function getLevelProfile() {
                     // 取得目前等級參數
+                    var levelProfile = levelProfiles[0];
+                    for (var i = 0; i < levelProfiles.length; i++) { 
+                        if (score >= levelProfiles[i].score) {                             
+                            levelProfile = levelProfiles[i];                                                          
+                        } else { 
+                            break; 
+                        } 
+                    } 
+                    return levelProfile;                  
                 }
 
                 function updateScore() {
                     // 更新成績
                     score += 10;
-                    $('#current-score').text(score); 
+                    $('#current-score').html(score); 
                 }
 
                 function updateLife() {
@@ -302,7 +312,10 @@
                     updateLife();   
                     timer = setTimeout(function() {
                         nextMole();
-                    }, 1000);                                                                       
+                    }, 1000);       
+                    
+                    var levelProfile = getLevelProfile(); 
+                    $('#current-level').html(levelProfile.level);                                                          
                     // 🐭 下一隻地鼠                    
                 }
                 
