@@ -215,9 +215,9 @@
 
                 $playground.on("click", ".mole.active", function () {
                     // 打地鼠事件
+                    life += 10;                     
                     var $mole = $(this);
-                    $mole.addClass('hit');
-                    life += 20;                   
+                    $mole.addClass('hit');                                      
                     updateScore();                                                                                                                                                                      
                 });
 
@@ -284,16 +284,14 @@
                 }
 
                 function updateLife() {
-                    // 更新生命值
-                    var a = 0;
-                    $('#progress').text(life);
+                    // 更新生命值                    
+                    $('#progress').attr("aria-valuenow", life)
+                    .css("width", life + "%").text(life);
                     if(life > 0) {
-                        life -= 20;                        
+                        life -= 10;                        
                     } else if (life <= 0) {
-                        stopGame();                        
-                        // return(gameOver());
-                    }                    
-                    // $('#progress').attr("aria-valuenow", life).css("width", life + "%").text(life);                    
+                        stopGame();
+                    }                                                                            
                 }
 
                 function nextMole() {
