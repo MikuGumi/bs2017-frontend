@@ -260,16 +260,18 @@
                     $(".mole.hit").removeClass("hit");                   
                 }
 
-                // function gameOver() {
-                //     sweetAlert({
-                //             title: 'Game Over!',
-                //             html: $('<div>')
-                //                 .addClass('some-class')
-                //                 .text('you lose.'),
-                //             animation: false,
-                //             customClass: 'animated tada'
-                //     });                  
-                // }
+                function gameOver() {                    
+                                           
+                        sweetAlert({
+                            title: 'Game Over!',
+                            html: $('<div>')
+                                .addClass('some-class')
+                                .text('you lose.'),
+                            animation: false,
+                            customClass: 'animated tada'
+                    });                     
+                                                        
+                }
 
                 function getLevelProfile() {
                     // 取得目前等級參數
@@ -283,12 +285,13 @@
 
                 function updateLife() {
                     // 更新生命值
+                    var a = 0;
                     $('#progress').text(life);
                     if(life > 0) {
                         life -= 20;                        
                     } else if (life <= 0) {
-                        stopGame();             
-                        return;
+                        stopGame();                        
+                        // return(gameOver());
                     }                    
                     // $('#progress').attr("aria-valuenow", life).css("width", life + "%").text(life);                    
                 }
