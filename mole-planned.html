@@ -250,6 +250,8 @@
                 }
                 function startGame() {
                     // 開始遊戲 
+                    score = 0; 
+                    life = 100; 
                     nextMole();  
                     getLevelProfile();                                                                     
                 }
@@ -258,11 +260,11 @@
                     // 終止遊戲
                     clearTimeout(timer); 
                     $(".mole.active").removeClass("active"); 
-                    $(".mole.hit").removeClass("hit");                   
+                    $(".mole.hit").removeClass("hit");                    
+                    gameOver();              
                 }
 
-                function gameOver() {                    
-                                           
+                function gameOver() {                                                             
                         sweetAlert({
                             title: 'Game Over!',
                             html: $('<div>')
@@ -270,8 +272,7 @@
                                 .text('you lose.'),
                             animation: false,
                             customClass: 'animated tada'
-                    });                     
-                                                        
+                    });                                                                            
                 }
 
                 function getLevelProfile() {
@@ -296,12 +297,7 @@
                 function updateLife() {
                     // 更新生命值                    
                     $('#progress').attr("aria-valuenow", life)
-                    .css("width", life + "%").text(life);
-                    if(life > 0) {
-                        life -= 10;                        
-                    } else if (life <= 0) {
-                        stopGame();
-                    }                                                                            
+                    .css("width", life + "%").text(life);                                                                                                
                 }
 
                 function nextMole() {
@@ -315,7 +311,13 @@
                     }, 1000);       
                     
                     var levelProfile = getLevelProfile(); 
-                    $('#current-level').html(levelProfile.level);                                                          
+                    $('#current-level').html(levelProfile.level);
+
+                    if(life > 0) {
+                        life -= 10;                        
+                    } else if (life <= 0) {
+                        stopGame();                                                
+                    }                                                          
                     // 🐭 下一隻地鼠                    
                 }
                 
