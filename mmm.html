@@ -204,122 +204,148 @@
                     timer = null,
                     levelProfiles = [
                         { level: 1, score: 0, moles: 1, interval: 1500 },
-                        { level: 2, score: 100, moles: 2, interval: 1500 },
-                        { level: 3, score: 200, moles: 2, interval: 1250 },
-                        { level: 4, score: 300, moles: 2, interval: 1000 },
-                        { level: 5, score: 500, moles: 3, interval: 1000 },
-                        { level: 6, score: 1000, moles: 3, interval: 750 },
+                        { level: 2, score: 10, moles: 2, interval: 1500 },
+                        { level: 3, score: 20, moles: 2, interval: 1250 },
+                        { level: 4, score: 30, moles: 2, interval: 1000 },
+                        { level: 5, score: 50, moles: 3, interval: 1000 },
+                        { level: 6, score: 100, moles: 3, interval: 750 },
                     ];
 
                 var $playground = $("#playground");
 
+                $("#sizing").change(function () { 
+                // 變更尺寸事件 
+                createPlayground(this.value); 
+                stopGame(); 
+                score=0; 
+                life = 100; 
+                updateLife(); 
+                });
+
                 $playground.on("click", ".mole.active", function () {
-                    // 打地鼠事件
-                    life += 10;                     
-                    var $mole = $(this);
-                    $mole.addClass('hit');                                      
-                    updateScore();                                                                                                                                                                     
+                // 打地鼠事件 
+                var $this=$(this); 
+                $this.remove("active"); 
+                $this.addClass("hit"); 
+
+                //計分 
+                if($this.attr('class').indexOf('active')>0){ 
+                score+=10; 
+                } 
+                updateScore(); 
+                // getLevelProfile(); 
                 });
 
-                $("#sizing").change(function () {
-                    // 變更尺寸事件 
-                   createPlayground(this.value);   
-                   stopGame();           
+                $("#sizing").change(function () { 
+                // 變更尺寸事件 
+                createPlayground(this.value); 
+                stopGame(); 
+                score=0; 
+                life = 100; 
+                updateLife(); 
+                }); 
+
+                $("#start").click(function () { 
+                // 開始遊戲事件 
+                startGame(); 
+                }); 
+
+                $("#stop").click(function () { 
+                // 終止遊戲事件 
+                stopGame(); 
+
                 });
 
-                $("#start").click(function () {
-                    // 開始遊戲事件                                   
-                    startGame();                                
-                });
+                function createPlayground(edge) {
+                // 建立空間 
+                $("#playground").empty();
 
-                $("#stop").click(function () {
-                    // 終止遊戲事件
-                    stopGame();
-                });
-                function createPlayground(edge) {      
-                    // 建立空間       
-                    $playground.empty();       
-                    var $table = $('<table></table>').appendTo($playground);
-                    for (var i = 0; i < edge; i++) {
-                        var $tr = $('<tr></tr>').appendTo($table);                 
-
-                            for (j = 0; j < edge; j++) {
-                                var $td = $('<td></td>').appendTo($tr);
-                                var $div = $('<div></div>').addClass("mole").appendTo($td);                                
-                        }
-                    }                       
+                var $table=$('<table></table>').appendTo($playground);
+                for(var i=0;i<edge;i++){
+                var $tr=$('<tr></tr>').appendTo($table);
+                for(var j=0;j<edge;j++){
+                var $td=$('<td></td>').appendTo($tr);
+                var $div=$('<div></div>').addClass('mole').appendTo($td);
                 }
-                function startGame() {
-                    // 開始遊戲 
-                    score = 0; 
-                    life = 100; 
-                    nextMole();  
-                    getLevelProfile();                                                                     
                 }
 
-                function stopGame() {
-                    // 終止遊戲
-                    clearTimeout(timer); 
-                    $(".mole.active").removeClass("active"); 
-                    $(".mole.hit").removeClass("hit");                    
-                    gameOver();              
+
                 }
 
-                function gameOver() {                                                             
-                        sweetAlert({
-                            title: 'Game Over!',
-                            html: $('<div>')
-                                .addClass('some-class')
-                                .text('you lose.'),
-                            animation: false,
-                            customClass: 'animated tada'
-                    });                                                                            
+                function startGame() { 
+                // 開始遊戲 
+                // var $currentscore=$("#current-score"); 
+                // $currentscore.html("0"); 
+                score=0; 
+                life = 100; 
+                nextMole(); 
+                updateLife(); 
+                //setTimeout(startplay, 1500); 
+                } 
+
+                function stopGame() { 
+                // 終止遊戲 
+                clearTimeout(timer); 
+                } 
+
+                function getLevelProfile() { 
+                // 取得目前等級參數 
+                var levelProfile=levelProfiles[0]; 
+
+                for (var i = 0; i < levelProfiles.length; i++) 
+                { 
+                if (score >= levelProfiles[i].score) 
+                { 
+                levelProfile=levelProfiles[i]; 
+
+                }else{ 
+                break; 
+                } 
+                } 
+                return levelProfile; 
+                // $('#current-level').text(levelProfile.level); 
+                } 
+
+                function updateScore() { 
+                // 更新成績 
+                $('#current-score').empty(); 
+                //$('#current-score').html("0"); 
+                $('#current-score').html(score);
+                } 
+
+                function updateLife() { 
+                // 更新生命值 
+                $('#progress').attr("aria-valuenow",life) 
+                .css("width", life + "%").text(life) 
+                } 
+
+                function nextMole() { 
+                // 🐭 產生下一隻地鼠 
+                var $moles=$('.mole'); 
+                $moles.removeClass("active"); 
+                $moles.removeClass("hit"); 
+                var num=Math.floor(Math.random()*$moles.length);
+                //$moles.eq(num).addClass("active"); 
+                //timer=setTimeout(nextMole, 1500); 
+                if(life>0){ 
+                life -=10; 
+                updateLife(); 
+                }else if(life<=0){ 
+                stopGame(); 
+                alert("Game Over"); 
+                return; 
                 }
 
-                function getLevelProfile() {
-                    // 取得目前等級參數
-                    var levelProfile = levelProfiles[0];
-                    for (var i = 0; i < levelProfiles.length; i++) { 
-                        if (score >= levelProfiles[i].score) {                             
-                            levelProfile = levelProfiles[i];                                                          
-                        } else { 
-                            break; 
-                        } 
-                    } 
-                    return levelProfile;                  
-                }
+                var levelProfile=getLevelProfile(); 
+                $("#current-level").text(levelProfile.level); 
 
-                function updateScore() {
-                    // 更新成績
-                    score += 10;
-                    $('#current-score').html(score); 
-                }
-
-                function updateLife() {
-                    // 更新生命值                    
-                    $('#progress').attr("aria-valuenow", life)
-                    .css("width", life + "%").text(life);                                                                                                
-                }
-
-                function nextMole() {
-                    var $mole = $('.mole');
-                    var rnd = Math.floor((Math.random() * 9));                    
-                    $mole.removeClass('hit').removeClass('active');
-                    $( `.mole:eq(${rnd})`).addClass('active');
-                    updateLife();   
-                    timer = setTimeout(function() {
-                        nextMole();
-                    }, 1000);       
-                    
-                    var levelProfile = getLevelProfile(); 
-                    $('#current-level').html(levelProfile.level);
-
-                    if(life > 0) {
-                        life -= 10;                        
-                    } else if (life <= 0) {
-                        stopGame();                                                
-                    }                                                          
-                    // 🐭 下一隻地鼠                    
+                for(var i=0;i<levelProfile.moles;i++) 
+                { 
+                var next=Math.floor(Math.random()*$moles.length);
+                $moles.eq(next).addClass("active"); 
+                //timer=setTimeout(nextMole,levelProfile.interval);
+                } 
+                timer=setTimeout(nextMole,levelProfile.interval); 
                 }
                 
                 createPlayground(3);
